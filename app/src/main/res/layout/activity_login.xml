@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#49587f"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:focusable="true"
+              android:focusableInTouchMode="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:paddingTop="0dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm_80dp"
+                    android:layout_marginRight="@dimen/dm_80dp"
+                    android:src="@drawable/logo1"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm_20dp"
+                android:layout_marginRight="@dimen/dm_20dp"
+                android:background="#49587f"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/dm_10dp"
+                    android:layout_marginRight="@dimen/dm_10dp"
+                    android:layout_marginTop="@dimen/dm_10dp">
+
+                    <EditText
+                        android:id="@+id/edtUsername"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_edt"
+                        android:gravity="center_vertical"
+                        android:hint="Email"
+                        android:imeOptions="actionNext"
+                        android:paddingLeft="@dimen/dm_65dp"
+                        android:paddingRight="@dimen/dm_10dp"
+                        android:singleLine="true"
+                        android:textColor="#000000"
+                        android:textColorHint="#676b7d">
+
+
+                    </EditText>
+
+                    <ImageView
+                        android:id="@+id/imvMail"
+                        android:layout_width="@dimen/dm_20dp"
+                        android:layout_height="@dimen/dm_20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dm_15dp"
+                        android:layout_marginRight="@dimen/dm_15dp"
+                        android:src="@drawable/ic_mail"/>
+
+                    <FrameLayout
+                        android:layout_width="@dimen/dm_1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/dm_10dp"
+                        android:layout_marginTop="@dimen/dm_10dp"
+                        android:layout_toRightOf="@+id/imvMail"
+                        android:background="#676b7d">
+
+                    </FrameLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/dm_10dp"
+                    android:layout_marginRight="@dimen/dm_10dp"
+                    android:layout_marginTop="@dimen/dm_10dp">
+
+                    <EditText
+                        android:id="@+id/edtPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_edt"
+                        android:gravity="center_vertical"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:imeOptions="actionDone"
+                        android:paddingLeft="@dimen/dm_65dp"
+                        android:paddingRight="@dimen/dm_10dp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#676b7d"/>
+
+                    <ImageView
+                        android:id="@+id/imvPass"
+                        android:layout_width="@dimen/dm_20dp"
+                        android:layout_height="@dimen/dm_20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/dm_15dp"
+                        android:layout_marginRight="@dimen/dm_15dp"
+                        android:src="@drawable/ic_pass"/>
+
+                    <FrameLayout
+                        android:layout_width="@dimen/dm_1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/dm_10dp"
+                        android:layout_marginTop="@dimen/dm_10dp"
+                        android:layout_toRightOf="@+id/imvPass"
+                        android:background="#676b7d">
+
+                    </FrameLayout>
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="@dimen/dm_10dp"
+                    android:layout_marginRight="@dimen/dm_10dp"
+                    android:layout_marginTop="@dimen/dm_30dp"
+                    android:background="@drawable/layout_btn_login"
+                    android:gravity="center"
+                    android:text="LOG IN"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/txt_18sp"
+                    android:textStyle="bold"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

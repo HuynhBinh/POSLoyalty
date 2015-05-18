@@ -1,0 +1,457 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".ActivityMain"
+                android:background="#DDDDDD"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#414b61"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true">
+
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/logo1"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"/>
+
+
+        <TextView
+            android:layout_marginLeft="@dimen/dm_10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="POS Loyalty"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="right">
+
+            <LinearLayout
+                android:id="@+id/btnLogout"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:layout_marginRight="0dp"
+                android:background="@drawable/layout_btn_logout">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/logout"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="55dp"
+            >
+
+
+            <LinearLayout
+                android:id="@+id/voucherView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:scrollbars="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#DDDDDD"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/usedVoucherView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_used"
+                    android:scrollbars="none"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#DDDDDD"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/customerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dm_10dp"
+                    android:layout_marginRight="@dimen/dm_10dp"
+                    android:layout_marginTop="@dimen/dm_10dp"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dm_10dp"
+                    android:paddingBottom="@dimen/dm_10dp"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dm_15dp"
+                    android:background="@drawable/bg_shadow4">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/dm_20dp"
+                            android:layout_height="@dimen/dm_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/dm_15dp"
+                            android:layout_marginRight="@dimen/dm_15dp"
+                            android:src="@drawable/ic_user"/>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="15dp"
+                            android:background="#333333"/>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Leon Sheng Hai"
+                            android:gravity="center_vertical|left"
+                            android:paddingLeft="@dimen/dm_15dp"
+                            android:paddingRight="@dimen/dm_10dp"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:textColorHint="#676b7d"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/dm_5dp">
+
+                        <ImageView
+                            android:layout_width="@dimen/dm_20dp"
+                            android:layout_height="@dimen/dm_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/dm_15dp"
+                            android:layout_marginRight="@dimen/dm_15dp"
+                            android:src="@drawable/ic_email"/>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="15dp"
+                            android:background="#333333"/>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="shenghai@gmail.sg"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dm_15dp"
+                            android:paddingRight="@dimen/dm_10dp"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:textColorHint="#676b7d"/>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="@dimen/dm_5dp">
+
+                        <ImageView
+                            android:layout_width="@dimen/dm_20dp"
+                            android:layout_height="@dimen/dm_20dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/dm_15dp"
+                            android:layout_marginRight="@dimen/dm_15dp"
+                            android:src="@drawable/ic_group"/>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="15dp"
+                            android:background="#333333"/>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="VIP"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dm_15dp"
+                            android:paddingRight="@dimen/dm_10dp"
+                            android:singleLine="true"
+                            android:textColor="#000000"
+                            android:textColorHint="#676b7d"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center">
+
+
+                    <RelativeLayout
+                        android:id="@+id/btnGenVoucher"
+                        android:layout_width="200dp"
+                        android:layout_height="140dp"
+                        android:background="@drawable/layout_btn_gen"
+                        android:padding="@dimen/dm_10dp"
+                        android:gravity="center">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/txtCurrentPoint"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="100 point"
+                                android:gravity="center"
+                                android:textColor="#ffffff"
+                                android:textSize="30sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="@dimen/dm_10dp"/>
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="(click to generate voucher)"
+                                android:gravity="center"
+                                android:textColor="#ffffff"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                />
+
+
+                        </LinearLayout>
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:visibility="gone"/>
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dm_5dp"
+            android:background="@drawable/action_bar_shadow"/>
+
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:weightSum="3"
+        android:background="@drawable/tabshadow1"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/tabCustomer"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/layout_tab"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:id="@+id/imvMail"
+                android:layout_width="@dimen/dm_40dp"
+                android:layout_height="@dimen/dm_40dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_15dp"
+                android:layout_marginRight="@dimen/dm_15dp"
+                android:src="@drawable/ic_user_white"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dm_1dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff"/>
+
+        <LinearLayout
+            android:id="@+id/tabActiveVoucher"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/layout_tab"
+            android:gravity="center"
+            >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <ImageView
+                    android:id="@+id/imvMail1"
+                    android:layout_width="@dimen/dm_40dp"
+                    android:layout_height="@dimen/dm_40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dm_15dp"
+                    android:layout_marginRight="@dimen/dm_15dp"
+                    android:src="@drawable/ic_voucher"/>
+
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:gravity="right|top">
+
+                    <TextView
+                        android:id="@+id/txtNumberOfNewVoucher"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:text="13"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_text_number"
+
+                        />
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/dm_1dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff"/>
+
+        <LinearLayout
+            android:id="@+id/tabUsedVoucher"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@drawable/layout_tab"
+            android:gravity="center">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/dm_40dp"
+                    android:layout_height="@dimen/dm_40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dm_15dp"
+                    android:layout_marginRight="@dimen/dm_15dp"
+                    android:src="@drawable/ic_used_voucher"/>
+
+                <LinearLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:gravity="right|top">
+
+                    <TextView
+                        android:id="@+id/txtNumberOfUsedVoucher"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:text="13"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_text_number"
+
+                        />
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

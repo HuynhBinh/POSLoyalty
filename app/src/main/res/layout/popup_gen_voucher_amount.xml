@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@drawable/bg_dialog_popup"
+              android:focusable="true"
+              android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dm_10dp"
+        android:layout_marginBottom="@dimen/dm_10dp"
+        android:gravity="center"
+        >
+
+
+        <TextView
+            android:id="@+id/txtTittle"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#33b5e5"
+            android:textSize="20sp"
+            android:text="Generate voucher code"
+            />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dm_2dp"
+        android:background="#33b5e5"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/dm_20dp"
+        android:layout_marginBottom="@dimen/dm_30dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/dm_10dp"
+            android:layout_marginRight="@dimen/dm_10dp"
+            android:layout_marginTop="@dimen/dm_10dp">
+
+            <EditText
+                android:id="@+id/edtAmount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_edt_popup"
+                android:gravity="center_vertical"
+                android:hint="enter amount to generate"
+                android:paddingLeft="@dimen/dm_65dp"
+                android:paddingRight="@dimen/dm_10dp"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#676b7d"
+                android:inputType="number">
+
+
+            </EditText>
+
+            <ImageView
+                android:id="@+id/imvMail"
+                android:layout_width="@dimen/dm_20dp"
+                android:layout_height="@dimen/dm_20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dm_15dp"
+                android:layout_marginRight="@dimen/dm_15dp"
+                android:src="@drawable/ic_coins_s"/>
+
+            <FrameLayout
+                android:layout_width="@dimen/dm_1dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dm_10dp"
+                android:layout_marginTop="@dimen/dm_10dp"
+                android:layout_toRightOf="@+id/imvMail"
+                android:background="#676b7d">
+
+            </FrameLayout>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:id="@+id/txtError"
+                android:paddingTop="@dimen/dm_5dp"
+                android:visibility="gone"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#FF0000"
+
+                android:text="Invalid amount. please enter a numeric!"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:background="@drawable/bg_dialog_popup_bottom"
+        >
+
+
+        <LinearLayout
+            android:id="@+id/btnGenVoucher"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/layout_btn_popup"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="@dimen/dm_1dp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:text="Generate"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="@dimen/dm_1dp"
+            android:background="@drawable/layout_btn_popup_right">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="#000000"
+                android:text="Cancel"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
