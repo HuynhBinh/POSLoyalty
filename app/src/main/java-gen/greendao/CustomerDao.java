@@ -28,6 +28,14 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
         public final static Property CustomerEmail = new Property(2, String.class, "customerEmail", false, "CUSTOMER_EMAIL");
         public final static Property CustomerPhone = new Property(3, String.class, "customerPhone", false, "CUSTOMER_PHONE");
         public final static Property CustomerPoint = new Property(4, Double.class, "customerPoint", false, "CUSTOMER_POINT");
+        public final static Property CustomerGroup = new Property(5, String.class, "customerGroup", false, "CUSTOMER_GROUP");
+        public final static Property CustomerCode = new Property(6, String.class, "customerCode", false, "CUSTOMER_CODE");
+        public final static Property CustomerID = new Property(7, String.class, "customerID", false, "CUSTOMER_ID");
+        public final static Property Company = new Property(8, String.class, "company", false, "COMPANY");
+        public final static Property VoucherMin = new Property(9, Double.class, "voucherMin", false, "VOUCHER_MIN");
+        public final static Property VoucherMax = new Property(10, Double.class, "voucherMax", false, "VOUCHER_MAX");
+        public final static Property IsFixedAmount = new Property(11, Boolean.class, "isFixedAmount", false, "IS_FIXED_AMOUNT");
+        public final static Property FixedAmount = new Property(12, Double.class, "fixedAmount", false, "FIXED_AMOUNT");
     };
 
     private DaoSession daoSession;
@@ -50,7 +58,15 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
                 "'CUSTOMER_NAME' TEXT," + // 1: customerName
                 "'CUSTOMER_EMAIL' TEXT," + // 2: customerEmail
                 "'CUSTOMER_PHONE' TEXT," + // 3: customerPhone
-                "'CUSTOMER_POINT' REAL);"); // 4: customerPoint
+                "'CUSTOMER_POINT' REAL," + // 4: customerPoint
+                "'CUSTOMER_GROUP' TEXT," + // 5: customerGroup
+                "'CUSTOMER_CODE' TEXT," + // 6: customerCode
+                "'CUSTOMER_ID' TEXT," + // 7: customerID
+                "'COMPANY' TEXT," + // 8: company
+                "'VOUCHER_MIN' REAL," + // 9: voucherMin
+                "'VOUCHER_MAX' REAL," + // 10: voucherMax
+                "'IS_FIXED_AMOUNT' INTEGER," + // 11: isFixedAmount
+                "'FIXED_AMOUNT' REAL);"); // 12: fixedAmount
     }
 
     /** Drops the underlying database table. */
@@ -88,6 +104,46 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
         if (customerPoint != null) {
             stmt.bindDouble(5, customerPoint);
         }
+ 
+        String customerGroup = entity.getCustomerGroup();
+        if (customerGroup != null) {
+            stmt.bindString(6, customerGroup);
+        }
+ 
+        String customerCode = entity.getCustomerCode();
+        if (customerCode != null) {
+            stmt.bindString(7, customerCode);
+        }
+ 
+        String customerID = entity.getCustomerID();
+        if (customerID != null) {
+            stmt.bindString(8, customerID);
+        }
+ 
+        String company = entity.getCompany();
+        if (company != null) {
+            stmt.bindString(9, company);
+        }
+ 
+        Double voucherMin = entity.getVoucherMin();
+        if (voucherMin != null) {
+            stmt.bindDouble(10, voucherMin);
+        }
+ 
+        Double voucherMax = entity.getVoucherMax();
+        if (voucherMax != null) {
+            stmt.bindDouble(11, voucherMax);
+        }
+ 
+        Boolean isFixedAmount = entity.getIsFixedAmount();
+        if (isFixedAmount != null) {
+            stmt.bindLong(12, isFixedAmount ? 1l: 0l);
+        }
+ 
+        Double fixedAmount = entity.getFixedAmount();
+        if (fixedAmount != null) {
+            stmt.bindDouble(13, fixedAmount);
+        }
     }
 
     @Override
@@ -110,7 +166,15 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // customerName
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // customerEmail
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // customerPhone
-            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4) // customerPoint
+            cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4), // customerPoint
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // customerGroup
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // customerCode
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // customerID
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // company
+            cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9), // voucherMin
+            cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10), // voucherMax
+            cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isFixedAmount
+            cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12) // fixedAmount
         );
         return entity;
     }
@@ -123,6 +187,14 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
         entity.setCustomerEmail(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setCustomerPhone(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setCustomerPoint(cursor.isNull(offset + 4) ? null : cursor.getDouble(offset + 4));
+        entity.setCustomerGroup(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCustomerCode(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCustomerID(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setCompany(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setVoucherMin(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
+        entity.setVoucherMax(cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10));
+        entity.setIsFixedAmount(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
+        entity.setFixedAmount(cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12));
      }
     
     /** @inheritdoc */

@@ -26,5 +26,7 @@
     <color name="cyan">#00bcd4</color>
     <color name="teal">#009688</color>
     <color name="brown">#795548</color>
+    <color name="bg_orance">#f18910</color>
+    <color name="bg_blue">#414b61</color>
 
 </resources>

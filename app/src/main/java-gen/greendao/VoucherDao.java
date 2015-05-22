@@ -57,7 +57,7 @@ public class VoucherDao extends AbstractDao<Voucher, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'VOUCHER' (" + //
                 "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "'VOUCHER_CODE' TEXT," + // 1: voucherCode
+                "'VOUCHER_CODE' TEXT UNIQUE ," + // 1: voucherCode
                 "'VOUCHER_AMOUNT' REAL," + // 2: voucherAmount
                 "'VOUCHER_GENERATED_TIME' TEXT," + // 3: voucherGeneratedTime
                 "'IS_APPLIED' INTEGER," + // 4: isApplied

@@ -21,12 +21,20 @@ public class MyDaoGenerator
         customer.addStringProperty("customerEmail");
         customer.addStringProperty("customerPhone");
         customer.addDoubleProperty("customerPoint");
+        customer.addStringProperty("customerGroup");
+        customer.addStringProperty("customerCode");
+        customer.addStringProperty("customerID");
+        customer.addStringProperty("company");
+        customer.addDoubleProperty("voucherMin");
+        customer.addDoubleProperty("voucherMax");
+        customer.addBooleanProperty("isFixedAmount");
+        customer.addDoubleProperty("fixedAmount");
 
 
         Entity voucher = schema.addEntity("Voucher");
         Property voucherID = voucher.addIdProperty().autoincrement().getProperty();
 
-        voucher.addStringProperty("voucherCode");
+        voucher.addStringProperty("voucherCode").unique();
         voucher.addDoubleProperty("voucherAmount");
         voucher.addStringProperty("voucherGeneratedTime");
         voucher.addBooleanProperty("isApplied");

@@ -34,7 +34,7 @@ public class GreedDaoController
 
     public static void insertVoucherInBulk(Context context, ArrayList<Voucher> listVouchers)
     {
-        getVoucherDAO(context).insertInTx(listVouchers);
+        getVoucherDAO(context).insertOrReplaceInTx(listVouchers, true);//.insertInTx(listVouchers);
     }
 
     public static void updateVoucher(Context context, Voucher voucher)
@@ -50,6 +50,12 @@ public class GreedDaoController
     public static List<Voucher> loadUsedVouchers(Context context)
     {
         return getVoucherDAO(context).queryRaw("WHERE IS_APPLIED = ? ORDER BY APPLIED_TIME DESC", "1");
+    }
+
+
+    public static List<Customer> getCustomerByCustomerID(Context context, String cusID)
+    {
+        return getCustomerDAO(context).queryRaw("WHERE CUSTOMER_ID = ?", cusID);
     }
 
 
@@ -73,5 +79,24 @@ public class GreedDaoController
         return getVoucherDAO(context).load(id);
     }
 
+    public static void deleteAllCustomer(Context context)
+    {
+
+        getCustomerDAO(context).deleteAll();
+
+    }
+
+
+    public static void deleteAllVoucher(Context context)
+    {
+
+        getVoucherDAO(context).deleteAll();
+
+    }
+
+    public static Voucher getVoucherByVoucherCode(Context context, String vCode)
+    {
+        return getVoucherDAO(context).queryBuilder().where(VoucherDao.Properties.VoucherCode.eq(vCode)).uniqueOrThrow();
+    }
 
 }

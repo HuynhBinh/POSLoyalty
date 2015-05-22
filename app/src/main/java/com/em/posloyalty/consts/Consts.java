@@ -12,6 +12,8 @@ public class Consts
     public static int NUM_OF_NEW_VOUCHER = 0;
     public static int NUM_OF_USED_VOUCHER = 0;
 
+    public static final long LEAST_REFRESH_TIME = 5000;
+
 
     // In GCM, the Sender ID is a project ID that you acquire from the API
     public static final String PROJECT_NUMBER = "381428347477";
@@ -30,4 +32,7 @@ public class Consts
 
     public static final String GCM_RECEIVED = "Received: ";
     // end GCM setup
+
+
+
 }

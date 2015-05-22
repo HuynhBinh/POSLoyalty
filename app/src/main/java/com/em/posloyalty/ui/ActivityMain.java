@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,13 +28,16 @@ import com.em.posloyalty.R;
 import com.em.posloyalty.adapter.VoucherAdapter;
 import com.em.posloyalty.consts.APIConst;
 import com.em.posloyalty.consts.Consts;
+import com.em.posloyalty.consts.StaticFunc;
 import com.em.posloyalty.daocontrol.GreedDaoController;
+import com.em.posloyalty.receiver.NetworkChangeReceiver;
 import com.em.posloyalty.service.APIService;
 import com.em.posloyalty.simpletoast.SimpleToast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import greendao.Customer;
 import greendao.Voucher;
 
 
@@ -74,29 +80,89 @@ public class ActivityMain extends ActionBarActivity
 
     ProgressBar progressBar;
 
+    TextView txtCustomerName;
+    TextView txtCustomerEmail;
+    TextView txtCustomerGroup;
+    TextView txtCustomerLoyaltyPoint;
+
+    TextView txtCompanyName;
+    TextView txtButtonInfo;
+
+    SwipeRefreshLayout voucherSwipeRefreshLayout;
 
     private BroadcastReceiver activityReceiver = new BroadcastReceiver()
     {
-
         @Override
         public void onReceive(Context context, Intent intent)
         {
             if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_GEN_VOUCHER))
             {
-                Consts.NUM_OF_NEW_VOUCHER++;
-                if (Consts.NUM_OF_NEW_VOUCHER != 0)
+
+                String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
+                if (result.equalsIgnoreCase(APIConst.RESULT_OK))
                 {
-                    txtNumberOfNewVoucher.setText(Consts.NUM_OF_NEW_VOUCHER + "");
-                    txtNumberOfNewVoucher.setVisibility(View.VISIBLE);
+                    Consts.NUM_OF_NEW_VOUCHER++;
+                    if (Consts.NUM_OF_NEW_VOUCHER != 0)
+                    {
+                        txtNumberOfNewVoucher.setText(Consts.NUM_OF_NEW_VOUCHER + "");
+                        txtNumberOfNewVoucher.setVisibility(View.VISIBLE);
+                    }
+                    SimpleToast.info(ActivityMain.this, "Generated successfully!");
+                } else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                {
+                    SimpleToast.error(ActivityMain.this, "Please check internet connection!");
+                } else
+                {
+                    SimpleToast.error(ActivityMain.this, "Fail to generate voucher!");
                 }
-                SimpleToast.info(ActivityMain.this, "Generated successfully!");
+
+
             } else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER))
             {
 
+                Log.e("GO", "Go here main");
 
-                listVouchers = GreedDaoController.loadActiveVouchers(ActivityMain.this);
-                ((VoucherAdapter) mAdapter).listData = listVouchers;
-                ((VoucherAdapter) mAdapter).notifyDataChange();
+                String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
+                if (result.equalsIgnoreCase(APIConst.RESULT_OK))
+                {
+                    listVouchers = GreedDaoController.loadActiveVouchers(ActivityMain.this);
+                    ((VoucherAdapter) mAdapter).listData = listVouchers;
+                    ((VoucherAdapter) mAdapter).notifyDataChange();
+
+
+                    if (voucherSwipeRefreshLayout != null)
+                    {
+                        voucherSwipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    // update status of loading voucher
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+
+                            APIConst.isLoadingActiveVoucher = false;
+
+                        }
+                    }, Consts.LEAST_REFRESH_TIME);
+
+
+                } else if (result.equalsIgnoreCase(APIConst.RESULT_JUST_LOAD_IN_A_SECOND))
+                {
+
+                    voucherSwipeRefreshLayout.setRefreshing(false);
+
+                } else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                {
+                    APIConst.isLoadingActiveVoucher = false;
+                    SimpleToast.error(ActivityMain.this, "No internet connection! Fail to update data.");
+                } else
+                {
+                    APIConst.isLoadingActiveVoucher = false;
+                    SimpleToast.error(ActivityMain.this, "Error! Fail to update data");
+                }
 
 
             } else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER))
@@ -128,6 +194,17 @@ public class ActivityMain extends ActionBarActivity
                 }
 
 
+            } else if (intent.getAction().equalsIgnoreCase(NetworkChangeReceiver.ON_NETWORK_CHANGE))
+            {
+                String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
+                if (result.equals(NetworkChangeReceiver.ONLINE))
+                {
+                    enableBtnGen();
+
+                } else if (result.equals(NetworkChangeReceiver.OFFLINE))
+                {
+                    disableBtnGen();
+                }
             }
 
 
@@ -140,20 +217,12 @@ public class ActivityMain extends ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        registerBroadcastReceiver();
+        initView();
 
         bgPress = getResources().getDrawable(R.drawable.bg_tab_press);
         bgUnPress = getResources().getDrawable(R.drawable.bg_tab);
 
-        initView();
-        registerTabClickListener();
-        registerBtnGenVoucherClickListener();
-        registerBtnLogoutClickListener();
-
-
-        //genTestVoucherCode();
-
+        // recycler view init
         listVouchers = new ArrayList<>();
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -165,6 +234,35 @@ public class ActivityMain extends ActionBarActivity
 
         mAdapterUsed = new VoucherAdapter(ActivityMain.this, listVouchers, screenWidth);
         mRecyclerViewUsed.setAdapter(mAdapterUsed);
+
+        registerBroadcastReceiver();
+
+        registerCoucherSwipeRefresh();
+
+        setCustomerDataToScreen();
+
+        registerTabClickListener();
+        registerBtnGenVoucherClickListener();
+        registerBtnLogoutClickListener();
+
+
+    }
+
+    private void setCustomerDataToScreen()
+    {
+        Customer customer;
+
+        customer = GreedDaoController.getCustomerByID(ActivityMain.this, 1);
+
+
+        txtCustomerName.setText(customer.getCustomerName());
+        txtCustomerEmail.setText(customer.getCustomerEmail());
+        txtCustomerGroup.setText(customer.getCustomerGroup());
+
+
+        txtCustomerLoyaltyPoint.setText(String.format("$ %.2f", customer.getCustomerPoint()));
+
+        txtCompanyName.setText(customer.getCompany());
 
 
     }
@@ -199,6 +297,13 @@ public class ActivityMain extends ActionBarActivity
         tabCustomer = (LinearLayout) findViewById(R.id.tabCustomer);
 
         btnGenVoucher = (RelativeLayout) findViewById(R.id.btnGenVoucher);
+        txtButtonInfo = (TextView) findViewById(R.id.txtBtnInfo);
+        if (StaticFunc.isNetworkAvailable(this) == false)
+        {
+            disableBtnGen();
+        }
+
+
         btnLogout = (LinearLayout) findViewById(R.id.btnLogout);
 
         actionBar = (LinearLayout) findViewById(R.id.actionbar);
@@ -211,6 +316,51 @@ public class ActivityMain extends ActionBarActivity
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        txtCustomerName = (TextView) findViewById(R.id.txtCustomerName);
+        txtCustomerEmail = (TextView) findViewById(R.id.txtCustomerEmail);
+        txtCustomerGroup = (TextView) findViewById(R.id.txtCustomerGroup);
+
+        txtCustomerLoyaltyPoint = (TextView) findViewById(R.id.txtCurrentPoint);
+
+        txtCompanyName = (TextView) findViewById(R.id.txtCompanyName);
+
+        voucherSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        voucherSwipeRefreshLayout.setColorSchemeResources(R.color.bg_orance);
+
+    }
+
+
+    private void registerCoucherSwipeRefresh()
+    {
+        voucherSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                Customer customer = GreedDaoController.getCustomerByID(ActivityMain.this, 1);
+
+                //load active voucher update
+                Intent intent = new Intent(APIConst.ACTION_LOAD_ACTIVE_VOUCHER, null, ActivityMain.this, APIService.class);
+                intent.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
+                startService(intent);
+            }
+        });
+    }
+
+
+    private void enableBtnGen()
+    {
+        btnGenVoucher.setEnabled(true);
+        btnGenVoucher.setAlpha(1f);
+        txtButtonInfo.setText("(click to generate voucher)");
+    }
+
+    private void disableBtnGen()
+    {
+        btnGenVoucher.setEnabled(false);
+        btnGenVoucher.setAlpha(0.4f);
+
+        txtButtonInfo.setText("Opp, no internet connection!");
     }
 
 
@@ -234,7 +384,13 @@ public class ActivityMain extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
-                showEnterAmountDialog(ActivityMain.this);
+                if (StaticFunc.isNetworkAvailable(ActivityMain.this))
+                {
+                    showEnterAmountDialog(ActivityMain.this);
+                } else
+                {
+                    SimpleToast.error(ActivityMain.this, "Sorry, please check internet connection!");
+                }
             }
         });
     }
@@ -258,8 +414,11 @@ public class ActivityMain extends ActionBarActivity
                 if (currentTab != Consts.TAB_ACTIVE_VOUCHER)
                 {
 
+                    Customer customer = GreedDaoController.getCustomerByID(ActivityMain.this, 1);
+
                     //load active voucher update
                     Intent intent = new Intent(APIConst.ACTION_LOAD_ACTIVE_VOUCHER, null, ActivityMain.this, APIService.class);
+                    intent.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
                     startService(intent);
 
 
@@ -351,6 +510,8 @@ public class ActivityMain extends ActionBarActivity
             intentFilter.addAction(APIConst.RECEIVER_FINISH_APPLY_VOUCHER);
             intentFilter.addAction(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER);
             intentFilter.addAction(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER);
+            // this is for online offline status
+            intentFilter.addAction(NetworkChangeReceiver.ON_NETWORK_CHANGE);
             registerReceiver(activityReceiver, intentFilter);
         }
     }
@@ -457,6 +618,10 @@ public class ActivityMain extends ActionBarActivity
         final EditText edtAmount = (EditText) dialog.findViewById(R.id.edtAmount);
         final TextView txtError = (TextView) dialog.findViewById(R.id.txtError);
 
+        final Customer customer = GreedDaoController.getCustomerByID(ActivityMain.this, 1);
+
+        edtAmount.setHint("enter amount $" + customer.getVoucherMin() + " - $" + customer.getVoucherMax());
+
 
         btnCancel.setOnClickListener(new View.OnClickListener()
         {
@@ -474,7 +639,8 @@ public class ActivityMain extends ActionBarActivity
             {
                 String strAmount = edtAmount.getText().toString().trim();
 
-                String validatedResult = validateEnterAmount(strAmount, 5, 50);
+
+                String validatedResult = validateEnterAmount(strAmount, customer.getVoucherMin(), customer.getVoucherMax());
 
                 if (!validatedResult.equalsIgnoreCase("OK"))
                 {
@@ -485,6 +651,11 @@ public class ActivityMain extends ActionBarActivity
                     txtError.setVisibility(View.GONE);
                     Intent intent = new Intent(APIConst.ACTION_GEN_VOUCHER, null, ActivityMain.this, APIService.class);
                     intent.putExtra(APIConst.EXTRA_AMOUNT, strAmount);
+
+                    //
+
+                    //
+                    intent.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
                     startService(intent);
                     dialog.dismiss();
                 }
@@ -538,6 +709,8 @@ public class ActivityMain extends ActionBarActivity
             @Override
             public void onClick(View view)
             {
+                GreedDaoController.deleteAllCustomer(ActivityMain.this);
+                GreedDaoController.deleteAllVoucher(ActivityMain.this);
 
                 Intent intent = new Intent(ActivityMain.this, ActivityLogin.class);
                 startActivity(intent);
@@ -551,6 +724,8 @@ public class ActivityMain extends ActionBarActivity
         dialog.show();
     }
 
+
+    // testing only
     private void genTestVoucherCode()
     {
 

@@ -4,14 +4,9 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import com.em.posloyalty.api.APIWrapper;
 import com.em.posloyalty.consts.APIConst;
 import com.em.posloyalty.consts.StaticFunc;
-import com.em.posloyalty.daocontrol.GreedDaoController;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import greendao.Voucher;
 
 
 /**
@@ -40,7 +35,8 @@ public class APIService extends IntentService
 
             if (StaticFunc.isNetworkAvailable(APIService.this))
             {
-                boolean isSuccess = true;//APIWrapper.login(username, password);
+
+                boolean isSuccess = APIWrapper.login(APIService.this, username, password);
                 if (isSuccess)
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_LOGIN, APIConst.RESULT_OK, "-1");
@@ -49,6 +45,7 @@ public class APIService extends IntentService
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_LOGIN, APIConst.RESULT_FAIL, "-1");
                 }
+
 
             } else
             {
@@ -59,21 +56,37 @@ public class APIService extends IntentService
         // if command save -> upload data to server
         else if (action.equals(APIConst.ACTION_LOAD_ACTIVE_VOUCHER))
         {
-            String username = intent.getStringExtra(APIConst.EXTRA_USERNAME);
-
             Log.e("onHandleIntent", "ACTION_LOAD_ACTIVE_VOUCHER");
 
             if (StaticFunc.isNetworkAvailable(APIService.this))
             {
-                boolean isSuccess = true;//APIWrapper.getActiveVouchers();
-                if (isSuccess)
+
+
+                if (APIConst.isLoadingActiveVoucher == false)
                 {
-                    sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_OK, "-1");
+
+
+                    APIConst.isLoadingActiveVoucher = true;
+
+
+                    String cusID = intent.getStringExtra(APIConst.EXTRA_CUSTOMER_ID);
+                    boolean isSuccess = APIWrapper.getAllVouchers(APIService.this, cusID);
+
+                    if (isSuccess)
+                    {
+                        sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_OK, "-1");
+
+                    } else
+                    {
+                        sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_FAIL, "-1");
+                    }
+
 
                 } else
                 {
-                    sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_FAIL, "-1");
+                    sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_JUST_LOAD_IN_A_SECOND, "-1");
                 }
+
 
             } else
             {
@@ -104,16 +117,17 @@ public class APIService extends IntentService
             Log.e("onHandleIntent", "ACTION_GEN_VOUCHER");
 
             String strAmount = intent.getStringExtra(APIConst.EXTRA_AMOUNT);
+            String cusID = intent.getStringExtra(APIConst.EXTRA_CUSTOMER_ID);
 
 
             if (StaticFunc.isNetworkAvailable(APIService.this))
             {
 
-                boolean isSuccess = true;//signup(fullname, password, email, phone);
+                boolean isSuccess = APIWrapper.generateVoucher(APIService.this, cusID, Double.parseDouble(strAmount));
                 if (isSuccess)
                 {
 
-                    Long time = System.currentTimeMillis();
+                    /*Long time = System.currentTimeMillis();
 
                     String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
                     Voucher voucher = new Voucher();
@@ -126,7 +140,7 @@ public class APIService extends IntentService
                     String strDate = sdf.format(c.getTime());
                     voucher.setVoucherGeneratedTime(strDate);
 
-                    GreedDaoController.insertVoucher(APIService.this, voucher);
+                    GreedDaoController.insertVoucher(APIService.this, voucher);*/
 
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_GEN_VOUCHER, APIConst.RESULT_OK, "-1");
                 } else
@@ -140,7 +154,7 @@ public class APIService extends IntentService
         } else if (action.equals(APIConst.ACTION_APPLY_VOUCHER))
         {
             Log.e("onHandleIntent", "ACTION_APPLY_VOUCHER");
-            
+
             String voucherCode = intent.getStringExtra(APIConst.EXTRA_VC_ID);
 
             if (StaticFunc.isNetworkAvailable(APIService.this))

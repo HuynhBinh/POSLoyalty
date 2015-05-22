@@ -8,18 +8,67 @@
               android:focusable="true"
               android:focusableInTouchMode="true">
 
+    <LinearLayout
+        android:id="@+id/layoutFlash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:paddingTop="0dp"
+        android:visibility="gone"
+        android:gravity="center"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dm_40dp"
+                android:layout_marginRight="@dimen/dm_40dp"
+                android:src="@drawable/logo1"
+                />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/progressBarFlashscreen"
+                android:theme="@style/AlertDialog.AppCompat.Light"
+                android:layout_width="25dp"
+                android:layout_height="25dp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
     <ScrollView
+        android:id="@+id/layoutLogin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="false"
+        android:visibility="visible"
         >
 
+
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:paddingTop="0dp"
+            android:paddingBottom="50dp"
             >
 
             <RelativeLayout
@@ -65,6 +114,7 @@
                         android:paddingRight="@dimen/dm_10dp"
                         android:singleLine="true"
                         android:textColor="#000000"
+                        android:text="BINH-1ICT"
                         android:textColorHint="#676b7d">
 
 
@@ -110,6 +160,7 @@
                         android:paddingRight="@dimen/dm_10dp"
                         android:singleLine="true"
                         android:textColor="#ffffff"
+                        android:text="tKcBlG"
                         android:textColorHint="#676b7d"/>
 
                     <ImageView
@@ -135,7 +186,7 @@
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="@dimen/dm_10dp"
                     android:layout_marginRight="@dimen/dm_10dp"
                     android:layout_marginTop="@dimen/dm_30dp"

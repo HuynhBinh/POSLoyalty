@@ -25,9 +25,14 @@ public class APIConst
     public static final String RESULT_OK = "RESULT_OK";
     public static final String RESULT_FAIL = "RESULT_FAIL";
     public static final String RESULT_NO_INTERNET = "RESULT_NO_INTERNET";
+    public static final String RESULT_JUST_LOAD_IN_A_SECOND = "RESULT_JUST_LOAD_IN_A_SECOND";
 
     public static final String EXTRA_USERNAME = "EXTRA_USERNAME";
     public static final String EXTRA_PASSWORD = "EXTRA_PASSWORD";
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
+    public static final String EXTRA_CUSTOMER_ID = "EXTRA_CUSTOMER_ID";
     public static final String EXTRA_VC_ID = "EXTRA_VC_ID";
+
+
+    public static boolean isLoadingActiveVoucher = false;
 }

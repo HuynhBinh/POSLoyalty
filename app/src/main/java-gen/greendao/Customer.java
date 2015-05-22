@@ -15,6 +15,14 @@ public class Customer {
     private String customerEmail;
     private String customerPhone;
     private Double customerPoint;
+    private String customerGroup;
+    private String customerCode;
+    private String customerID;
+    private String company;
+    private Double voucherMin;
+    private Double voucherMax;
+    private Boolean isFixedAmount;
+    private Double fixedAmount;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -31,12 +39,20 @@ public class Customer {
         this.id = id;
     }
 
-    public Customer(Long id, String customerName, String customerEmail, String customerPhone, Double customerPoint) {
+    public Customer(Long id, String customerName, String customerEmail, String customerPhone, Double customerPoint, String customerGroup, String customerCode, String customerID, String company, Double voucherMin, Double voucherMax, Boolean isFixedAmount, Double fixedAmount) {
         this.id = id;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.customerPhone = customerPhone;
         this.customerPoint = customerPoint;
+        this.customerGroup = customerGroup;
+        this.customerCode = customerCode;
+        this.customerID = customerID;
+        this.company = company;
+        this.voucherMin = voucherMin;
+        this.voucherMax = voucherMax;
+        this.isFixedAmount = isFixedAmount;
+        this.fixedAmount = fixedAmount;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -83,6 +99,70 @@ public class Customer {
 
     public void setCustomerPoint(Double customerPoint) {
         this.customerPoint = customerPoint;
+    }
+
+    public String getCustomerGroup() {
+        return customerGroup;
+    }
+
+    public void setCustomerGroup(String customerGroup) {
+        this.customerGroup = customerGroup;
+    }
+
+    public String getCustomerCode() {
+        return customerCode;
+    }
+
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public Double getVoucherMin() {
+        return voucherMin;
+    }
+
+    public void setVoucherMin(Double voucherMin) {
+        this.voucherMin = voucherMin;
+    }
+
+    public Double getVoucherMax() {
+        return voucherMax;
+    }
+
+    public void setVoucherMax(Double voucherMax) {
+        this.voucherMax = voucherMax;
+    }
+
+    public Boolean getIsFixedAmount() {
+        return isFixedAmount;
+    }
+
+    public void setIsFixedAmount(Boolean isFixedAmount) {
+        this.isFixedAmount = isFixedAmount;
+    }
+
+    public Double getFixedAmount() {
+        return fixedAmount;
+    }
+
+    public void setFixedAmount(Double fixedAmount) {
+        this.fixedAmount = fixedAmount;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
