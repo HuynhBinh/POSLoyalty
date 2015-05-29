@@ -101,6 +101,11 @@ public class ActivityMain extends ActionBarActivity
                 String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
                 if (result.equalsIgnoreCase(APIConst.RESULT_OK))
                 {
+
+                    Customer customer = GreedDaoController.getCustomerByID(ActivityMain.this, 1);
+
+                    txtCustomerLoyaltyPoint.setText(String.format("$ %.2f", customer.getCustomerPoint()));
+
                     Consts.NUM_OF_NEW_VOUCHER++;
                     if (Consts.NUM_OF_NEW_VOUCHER != 0)
                     {
@@ -108,16 +113,19 @@ public class ActivityMain extends ActionBarActivity
                         txtNumberOfNewVoucher.setVisibility(View.VISIBLE);
                     }
                     SimpleToast.info(ActivityMain.this, "Generated successfully!");
-                } else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
                 {
                     SimpleToast.error(ActivityMain.this, "Please check internet connection!");
-                } else
+                }
+                else
                 {
                     SimpleToast.error(ActivityMain.this, "Fail to generate voucher!");
                 }
 
 
-            } else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER))
+            }
+            else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER))
             {
 
                 Log.e("GO", "Go here main");
@@ -128,7 +136,6 @@ public class ActivityMain extends ActionBarActivity
                     listVouchers = GreedDaoController.loadActiveVouchers(ActivityMain.this);
                     ((VoucherAdapter) mAdapter).listData = listVouchers;
                     ((VoucherAdapter) mAdapter).notifyDataChange();
-
 
                     if (voucherSwipeRefreshLayout != null)
                     {
@@ -149,59 +156,116 @@ public class ActivityMain extends ActionBarActivity
                     }, Consts.LEAST_REFRESH_TIME);
 
 
-                } else if (result.equalsIgnoreCase(APIConst.RESULT_JUST_LOAD_IN_A_SECOND))
+                }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_JUST_LOAD_IN_A_SECOND))
                 {
 
                     voucherSwipeRefreshLayout.setRefreshing(false);
 
-                } else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
                 {
                     APIConst.isLoadingActiveVoucher = false;
                     SimpleToast.error(ActivityMain.this, "No internet connection! Fail to update data.");
-                } else
+                }
+                else
                 {
                     APIConst.isLoadingActiveVoucher = false;
                     SimpleToast.error(ActivityMain.this, "Error! Fail to update data");
                 }
 
 
-            } else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER))
+            }
+            else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER))
             {
 
-                listVouchers = GreedDaoController.loadUsedVouchers(ActivityMain.this);
-                ((VoucherAdapter) mAdapterUsed).listData = listVouchers;
-                ((VoucherAdapter) mAdapterUsed).notifyDataChange();
+                Log.e("GO", "Go here main");
+
+                String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
+                if (result.equalsIgnoreCase(APIConst.RESULT_OK))
+                {
+                    listVouchers = GreedDaoController.loadUsedVouchers(ActivityMain.this);
+                    ((VoucherAdapter) mAdapterUsed).listData = listVouchers;
+                    ((VoucherAdapter) mAdapterUsed).notifyDataChange();
+
+                   /* if (voucherSwipeRefreshLayout != null)
+                    {
+                        voucherSwipeRefreshLayout.setRefreshing(false);
+                    }*/
+
+                    // update status of loading voucher
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+
+                            APIConst.isLoadingUsedVoucher = false;
+
+                        }
+                    }, Consts.LEAST_REFRESH_TIME);
 
 
-            } else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_APPLY_VOUCHER))
+                }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_JUST_LOAD_IN_A_SECOND))
+                {
+
+                    //voucherSwipeRefreshLayout.setRefreshing(false);
+
+                }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                {
+                    APIConst.isLoadingUsedVoucher = false;
+                    SimpleToast.error(ActivityMain.this, "No internet connection! Fail to update data.");
+                }
+                else
+                {
+                    APIConst.isLoadingUsedVoucher = false;
+                    SimpleToast.error(ActivityMain.this, "Error! Fail to update data");
+                }
+
+
+            }
+            else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_APPLY_VOUCHER))
             {
                 String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
-                String id = intent.getStringExtra(APIConst.EXTRA_RESULT_ID);
+                String code = intent.getStringExtra(APIConst.EXTRA_RESULT_ID);
 
                 if (result.equalsIgnoreCase(APIConst.RESULT_OK))
                 {
 
-                    Voucher voucher = GreedDaoController.getVoucherByID(ActivityMain.this, Long.parseLong(id));
+                    Voucher voucher = GreedDaoController.getVoucherByVoucherCode(ActivityMain.this, code);
 
-                    voucher.setIsApplied(true);
-                    voucher.setAppliedTime(System.currentTimeMillis() + "");
-                    GreedDaoController.updateVoucher(context, voucher);
+                    //voucher.setIsApplied(true);
+                    //voucher.setAppliedTime(System.currentTimeMillis() + "");
+                    //GreedDaoController.updateVoucher(context, voucher);
 
                     ((VoucherAdapter) mAdapter).removeItem(voucher);
 
 
                     SimpleToast.info(context, "Applied successfully!");
                 }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                {
+                    SimpleToast.error(ActivityMain.this, "No internet connection! Fail to apply.");
+                }
+                else
+                {
+                    SimpleToast.error(ActivityMain.this, "Error! Fail to apply");
+                }
 
 
-            } else if (intent.getAction().equalsIgnoreCase(NetworkChangeReceiver.ON_NETWORK_CHANGE))
+            }
+            else if (intent.getAction().equalsIgnoreCase(NetworkChangeReceiver.ON_NETWORK_CHANGE))
             {
                 String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
                 if (result.equals(NetworkChangeReceiver.ONLINE))
                 {
                     enableBtnGen();
 
-                } else if (result.equals(NetworkChangeReceiver.OFFLINE))
+                }
+                else if (result.equals(NetworkChangeReceiver.OFFLINE))
                 {
                     disableBtnGen();
                 }
@@ -387,7 +451,8 @@ public class ActivityMain extends ActionBarActivity
                 if (StaticFunc.isNetworkAvailable(ActivityMain.this))
                 {
                     showEnterAmountDialog(ActivityMain.this);
-                } else
+                }
+                else
                 {
                     SimpleToast.error(ActivityMain.this, "Sorry, please check internet connection!");
                 }
@@ -453,6 +518,13 @@ public class ActivityMain extends ActionBarActivity
             {
                 if (currentTab != Consts.TAB_USED_VOUCHER)
                 {
+
+                    Customer customer = GreedDaoController.getCustomerByID(ActivityMain.this, 1);
+
+                    //load active voucher update
+                    Intent intent = new Intent(APIConst.ACTION_LOAD_USED_VOUCHER, null, ActivityMain.this, APIService.class);
+                    intent.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
+                    startService(intent);
 
 
                     tabActiveVoucher.setBackground(bgUnPress);
@@ -577,7 +649,8 @@ public class ActivityMain extends ActionBarActivity
             dAmount = Double.parseDouble(amount);
 
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return "Please enter a valid amount. Must be numeric!";
         }
@@ -646,7 +719,8 @@ public class ActivityMain extends ActionBarActivity
                 {
                     txtError.setText(validatedResult);
                     txtError.setVisibility(View.VISIBLE);
-                } else
+                }
+                else
                 {
                     txtError.setVisibility(View.GONE);
                     Intent intent = new Intent(APIConst.ACTION_GEN_VOUCHER, null, ActivityMain.this, APIService.class);
@@ -748,7 +822,8 @@ public class ActivityMain extends ActionBarActivity
             {
                 voucher.setIsApplied(false);
 
-            } else
+            }
+            else
             {
                 voucher.setIsApplied(true);
             }

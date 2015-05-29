@@ -32,7 +32,9 @@ public class APIConst
     public static final String EXTRA_AMOUNT = "EXTRA_AMOUNT";
     public static final String EXTRA_CUSTOMER_ID = "EXTRA_CUSTOMER_ID";
     public static final String EXTRA_VC_ID = "EXTRA_VC_ID";
+    public static final String EXTRA_VC_CODE = "EXTRA_VC_CODE";
 
 
     public static boolean isLoadingActiveVoucher = false;
+    public static boolean isLoadingUsedVoucher = false;
 }

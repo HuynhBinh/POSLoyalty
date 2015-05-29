@@ -32,63 +32,34 @@ public class API
     //HttpConnectionParams.setSoTimeout(httpParams, TIME_OUT);
 
 
-    public String uploadTransactions(String jsonOfListTransactions)
+    public String applyVoucher(String customerID, String voucherCode)
     {
+
+        String apiExtend = "apply_mobile_voucher";
+        post = new HttpPost(API_BASE_LINK + apiExtend);
         HttpConnectionParams.setConnectionTimeout(httpParams, TIME_OUT);
         String content = "";
 
         List<NameValuePair> params = new ArrayList<NameValuePair>(1);
-        params.add(new BasicNameValuePair("class", "Transaction"));
-        params.add(new BasicNameValuePair("task", "transaction_createTrans"));
-        params.add(new BasicNameValuePair("trans", jsonOfListTransactions));
+        params.add(new BasicNameValuePair("customer_id", customerID));
+        params.add(new BasicNameValuePair("voucher_code", voucherCode));
 
         try
         {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
             post.setEntity(entity);
+
             ResponseHandler<String> handler = new BasicResponseHandler();
             content = client.execute(post, handler);
             Log.d("message", content);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.d("message", "fail" + e.toString());
         }
 
         return content;
 
-    }
-
-    public String getAllCard(long userid, int version)
-    {
-        HttpConnectionParams.setConnectionTimeout(httpParams, TIME_OUT);
-        String content = "";
-
-        List<NameValuePair> params = new ArrayList<NameValuePair>(1);
-        params.add(new BasicNameValuePair("class", "Card"));
-        params.add(new BasicNameValuePair("task", "card_GetAllSync"));
-        params.add(new BasicNameValuePair("version", version + ""));
-        params.add(new BasicNameValuePair("userid", userid + ""));
-
-        try
-        {
-            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
-            post.setEntity(entity);
-            ResponseHandler<String> handler = new BasicResponseHandler();
-            content = client.execute(post, handler);
-            Log.d("message", content);
-        } catch (Exception e)
-        {
-            Log.d("message", "fail" + e.toString());
-        }
-
-        return content;
-
-    }
-
-
-    public String useVoucher()
-    {
-        return "";
     }
 
 
@@ -106,11 +77,21 @@ public class API
     }
 
 
-    public String getAllVouchers(String customerID)
+    public String getAllVouchers(String customerID, boolean isCustomerApplied)
     {
+        String apiExtend = "";
 
-        String apiExtend = "get_vouchers_by_customer/" + customerID;
+        if (isCustomerApplied == true)
+        {
+            apiExtend = "get_vouchers_by_customer/" + customerID + "?is_applied=true";
+        }
+        else
+        {
+            apiExtend = "get_vouchers_by_customer/" + customerID + "?is_applied=false";
+        }
+
         get = new HttpGet(API_BASE_LINK + apiExtend);
+        //get = new HttpGet("http://10.0.2.2:1234/api/products/getAllProductsFromDB");
         HttpConnectionParams.setConnectionTimeout(httpParams, TIME_OUT);
         String content = "";
 
@@ -119,7 +100,8 @@ public class API
             ResponseHandler<String> handler = new BasicResponseHandler();
             content = client.execute(get, handler);
             Log.d("message", content);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.d("message", "fail" + e.toString());
         }
@@ -149,7 +131,8 @@ public class API
             ResponseHandler<String> handler = new BasicResponseHandler();
             content = client.execute(post, handler);
             Log.d("message", content);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.d("message", "fail" + e.toString());
         }
@@ -178,7 +161,8 @@ public class API
             ResponseHandler<String> handler = new BasicResponseHandler();
             content = client.execute(post, handler);
             Log.d("message", content);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.d("message", "fail" + e.toString());
         }
@@ -202,7 +186,8 @@ public class API
             ResponseHandler<String> handler = new BasicResponseHandler();
             content = client.execute(post, handler);
             Log.d("message", content);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Log.d("message", "fail" + e.toString());
         }

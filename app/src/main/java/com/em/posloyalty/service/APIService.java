@@ -41,13 +41,15 @@ public class APIService extends IntentService
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_LOGIN, APIConst.RESULT_OK, "-1");
 
-                } else
+                }
+                else
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_LOGIN, APIConst.RESULT_FAIL, "-1");
                 }
 
 
-            } else
+            }
+            else
             {
                 sendBroadCastResult(APIConst.RECEIVER_FINISH_LOGIN, APIConst.RESULT_NO_INTERNET, "-1");
             }
@@ -70,49 +72,74 @@ public class APIService extends IntentService
 
 
                     String cusID = intent.getStringExtra(APIConst.EXTRA_CUSTOMER_ID);
-                    boolean isSuccess = APIWrapper.getAllVouchers(APIService.this, cusID);
+                    boolean isSuccess = APIWrapper.getAllVouchers(APIService.this, cusID, false);
 
                     if (isSuccess)
                     {
                         sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_OK, "-1");
 
-                    } else
+                    }
+                    else
                     {
                         sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_FAIL, "-1");
                     }
 
 
-                } else
+                }
+                else
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_JUST_LOAD_IN_A_SECOND, "-1");
                 }
 
 
-            } else
+            }
+            else
             {
                 sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER, APIConst.RESULT_NO_INTERNET, "-1");
             }
-        } else if (action.equals(APIConst.ACTION_LOAD_USED_VOUCHER))
+        }
+        else if (action.equals(APIConst.ACTION_LOAD_USED_VOUCHER))
         {
-            Log.e("onHandleIntent", "ACTION_LOAD_USED_VOUCHER");
+            Log.e("onHandleIntent", "ACTION_LOAD_ACTIVE_VOUCHER");
+
             if (StaticFunc.isNetworkAvailable(APIService.this))
             {
+                if (APIConst.isLoadingUsedVoucher == false)
+                {
 
-                boolean isSuccess = false;//login(username, password);
-                if (isSuccess)
+
+                    APIConst.isLoadingUsedVoucher = true;
+
+
+                    String cusID = intent.getStringExtra(APIConst.EXTRA_CUSTOMER_ID);
+                    boolean isSuccess = APIWrapper.getAllVouchers(APIService.this, cusID, true);
+
+                    if (isSuccess)
+                    {
+                        sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER, APIConst.RESULT_OK, "-1");
+
+                    }
+                    else
+                    {
+                        sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER, APIConst.RESULT_FAIL, "-1");
+                    }
+
+
+                }
+                else
                 {
-                    sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER, APIConst.RESULT_OK, "-1");
-                } else
-                {
-                    sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER, APIConst.RESULT_FAIL, "-1");
+                    sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER, APIConst.RESULT_JUST_LOAD_IN_A_SECOND, "-1");
                 }
 
-            } else
+
+            }
+            else
             {
                 sendBroadCastResult(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER, APIConst.RESULT_NO_INTERNET, "-1");
             }
 
-        } else if (action.equals(APIConst.ACTION_GEN_VOUCHER))
+        }
+        else if (action.equals(APIConst.ACTION_GEN_VOUCHER))
         {
             Log.e("onHandleIntent", "ACTION_GEN_VOUCHER");
 
@@ -143,34 +170,40 @@ public class APIService extends IntentService
                     GreedDaoController.insertVoucher(APIService.this, voucher);*/
 
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_GEN_VOUCHER, APIConst.RESULT_OK, "-1");
-                } else
+                }
+                else
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_GEN_VOUCHER, APIConst.RESULT_FAIL, "-1");
                 }
-            } else
+            }
+            else
             {
                 sendBroadCastResult(APIConst.RECEIVER_FINISH_GEN_VOUCHER, APIConst.RESULT_NO_INTERNET, "-1");
             }
-        } else if (action.equals(APIConst.ACTION_APPLY_VOUCHER))
+        }
+        else if (action.equals(APIConst.ACTION_APPLY_VOUCHER))
         {
             Log.e("onHandleIntent", "ACTION_APPLY_VOUCHER");
 
-            String voucherCode = intent.getStringExtra(APIConst.EXTRA_VC_ID);
+            String voucherCode = intent.getStringExtra(APIConst.EXTRA_VC_CODE);
+            String cusID = intent.getStringExtra(APIConst.EXTRA_CUSTOMER_ID);
 
             if (StaticFunc.isNetworkAvailable(APIService.this))
             {
 
 
-                boolean isSuccess = true;//loadTransactionForTheMonthForNewLoginUser(userid, month);
+                boolean isSuccess = APIWrapper.applyVoucher(APIService.this, cusID, voucherCode);
 
                 if (isSuccess)
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_APPLY_VOUCHER, APIConst.RESULT_OK, voucherCode);
-                } else
+                }
+                else
                 {
                     sendBroadCastResult(APIConst.RECEIVER_FINISH_APPLY_VOUCHER, APIConst.RESULT_FAIL, voucherCode);
                 }
-            } else
+            }
+            else
             {
                 sendBroadCastResult(APIConst.RECEIVER_FINISH_APPLY_VOUCHER, APIConst.RESULT_NO_INTERNET, voucherCode);
             }

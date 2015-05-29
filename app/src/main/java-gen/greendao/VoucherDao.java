@@ -31,15 +31,16 @@ public class VoucherDao extends AbstractDao<Voucher, Long> {
         public final static Property VoucherAmount = new Property(2, Double.class, "voucherAmount", false, "VOUCHER_AMOUNT");
         public final static Property VoucherGeneratedTime = new Property(3, String.class, "voucherGeneratedTime", false, "VOUCHER_GENERATED_TIME");
         public final static Property IsApplied = new Property(4, Boolean.class, "isApplied", false, "IS_APPLIED");
-        public final static Property AppliedTime = new Property(5, String.class, "appliedTime", false, "APPLIED_TIME");
-        public final static Property AppliedOutletID = new Property(6, Long.class, "appliedOutletID", false, "APPLIED_OUTLET_ID");
-        public final static Property AppliedOutletName = new Property(7, String.class, "appliedOutletName", false, "APPLIED_OUTLET_NAME");
-        public final static Property AppliedCompanyID = new Property(8, Long.class, "appliedCompanyID", false, "APPLIED_COMPANY_ID");
-        public final static Property AppliedCompanyName = new Property(9, String.class, "appliedCompanyName", false, "APPLIED_COMPANY_NAME");
-        public final static Property AppliedUserID = new Property(10, Long.class, "appliedUserID", false, "APPLIED_USER_ID");
-        public final static Property AppliedUserName = new Property(11, String.class, "appliedUserName", false, "APPLIED_USER_NAME");
-        public final static Property AppliedBillCode = new Property(12, String.class, "appliedBillCode", false, "APPLIED_BILL_CODE");
-        public final static Property CustomerID = new Property(13, Long.class, "customerID", false, "CUSTOMER_ID");
+        public final static Property IsCustomerApplied = new Property(5, Boolean.class, "isCustomerApplied", false, "IS_CUSTOMER_APPLIED");
+        public final static Property AppliedTime = new Property(6, String.class, "appliedTime", false, "APPLIED_TIME");
+        public final static Property AppliedOutletID = new Property(7, Long.class, "appliedOutletID", false, "APPLIED_OUTLET_ID");
+        public final static Property AppliedOutletName = new Property(8, String.class, "appliedOutletName", false, "APPLIED_OUTLET_NAME");
+        public final static Property AppliedCompanyID = new Property(9, Long.class, "appliedCompanyID", false, "APPLIED_COMPANY_ID");
+        public final static Property AppliedCompanyName = new Property(10, String.class, "appliedCompanyName", false, "APPLIED_COMPANY_NAME");
+        public final static Property AppliedUserID = new Property(11, Long.class, "appliedUserID", false, "APPLIED_USER_ID");
+        public final static Property AppliedUserName = new Property(12, String.class, "appliedUserName", false, "APPLIED_USER_NAME");
+        public final static Property AppliedBillCode = new Property(13, String.class, "appliedBillCode", false, "APPLIED_BILL_CODE");
+        public final static Property CustomerID = new Property(14, Long.class, "customerID", false, "CUSTOMER_ID");
     };
 
     private Query<Voucher> customer_VoucherListQuery;
@@ -61,15 +62,16 @@ public class VoucherDao extends AbstractDao<Voucher, Long> {
                 "'VOUCHER_AMOUNT' REAL," + // 2: voucherAmount
                 "'VOUCHER_GENERATED_TIME' TEXT," + // 3: voucherGeneratedTime
                 "'IS_APPLIED' INTEGER," + // 4: isApplied
-                "'APPLIED_TIME' TEXT," + // 5: appliedTime
-                "'APPLIED_OUTLET_ID' INTEGER," + // 6: appliedOutletID
-                "'APPLIED_OUTLET_NAME' TEXT," + // 7: appliedOutletName
-                "'APPLIED_COMPANY_ID' INTEGER," + // 8: appliedCompanyID
-                "'APPLIED_COMPANY_NAME' TEXT," + // 9: appliedCompanyName
-                "'APPLIED_USER_ID' INTEGER," + // 10: appliedUserID
-                "'APPLIED_USER_NAME' TEXT," + // 11: appliedUserName
-                "'APPLIED_BILL_CODE' TEXT," + // 12: appliedBillCode
-                "'CUSTOMER_ID' INTEGER);"); // 13: customerID
+                "'IS_CUSTOMER_APPLIED' INTEGER," + // 5: isCustomerApplied
+                "'APPLIED_TIME' TEXT," + // 6: appliedTime
+                "'APPLIED_OUTLET_ID' INTEGER," + // 7: appliedOutletID
+                "'APPLIED_OUTLET_NAME' TEXT," + // 8: appliedOutletName
+                "'APPLIED_COMPANY_ID' INTEGER," + // 9: appliedCompanyID
+                "'APPLIED_COMPANY_NAME' TEXT," + // 10: appliedCompanyName
+                "'APPLIED_USER_ID' INTEGER," + // 11: appliedUserID
+                "'APPLIED_USER_NAME' TEXT," + // 12: appliedUserName
+                "'APPLIED_BILL_CODE' TEXT," + // 13: appliedBillCode
+                "'CUSTOMER_ID' INTEGER);"); // 14: customerID
     }
 
     /** Drops the underlying database table. */
@@ -108,49 +110,54 @@ public class VoucherDao extends AbstractDao<Voucher, Long> {
             stmt.bindLong(5, isApplied ? 1l: 0l);
         }
  
+        Boolean isCustomerApplied = entity.getIsCustomerApplied();
+        if (isCustomerApplied != null) {
+            stmt.bindLong(6, isCustomerApplied ? 1l: 0l);
+        }
+ 
         String appliedTime = entity.getAppliedTime();
         if (appliedTime != null) {
-            stmt.bindString(6, appliedTime);
+            stmt.bindString(7, appliedTime);
         }
  
         Long appliedOutletID = entity.getAppliedOutletID();
         if (appliedOutletID != null) {
-            stmt.bindLong(7, appliedOutletID);
+            stmt.bindLong(8, appliedOutletID);
         }
  
         String appliedOutletName = entity.getAppliedOutletName();
         if (appliedOutletName != null) {
-            stmt.bindString(8, appliedOutletName);
+            stmt.bindString(9, appliedOutletName);
         }
  
         Long appliedCompanyID = entity.getAppliedCompanyID();
         if (appliedCompanyID != null) {
-            stmt.bindLong(9, appliedCompanyID);
+            stmt.bindLong(10, appliedCompanyID);
         }
  
         String appliedCompanyName = entity.getAppliedCompanyName();
         if (appliedCompanyName != null) {
-            stmt.bindString(10, appliedCompanyName);
+            stmt.bindString(11, appliedCompanyName);
         }
  
         Long appliedUserID = entity.getAppliedUserID();
         if (appliedUserID != null) {
-            stmt.bindLong(11, appliedUserID);
+            stmt.bindLong(12, appliedUserID);
         }
  
         String appliedUserName = entity.getAppliedUserName();
         if (appliedUserName != null) {
-            stmt.bindString(12, appliedUserName);
+            stmt.bindString(13, appliedUserName);
         }
  
         String appliedBillCode = entity.getAppliedBillCode();
         if (appliedBillCode != null) {
-            stmt.bindString(13, appliedBillCode);
+            stmt.bindString(14, appliedBillCode);
         }
  
         Long customerID = entity.getCustomerID();
         if (customerID != null) {
-            stmt.bindLong(14, customerID);
+            stmt.bindLong(15, customerID);
         }
     }
 
@@ -169,15 +176,16 @@ public class VoucherDao extends AbstractDao<Voucher, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2), // voucherAmount
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // voucherGeneratedTime
             cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0, // isApplied
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // appliedTime
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // appliedOutletID
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // appliedOutletName
-            cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8), // appliedCompanyID
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // appliedCompanyName
-            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10), // appliedUserID
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // appliedUserName
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // appliedBillCode
-            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // customerID
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isCustomerApplied
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // appliedTime
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7), // appliedOutletID
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // appliedOutletName
+            cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9), // appliedCompanyID
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // appliedCompanyName
+            cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11), // appliedUserID
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // appliedUserName
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // appliedBillCode
+            cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14) // customerID
         );
         return entity;
     }
@@ -190,15 +198,16 @@ public class VoucherDao extends AbstractDao<Voucher, Long> {
         entity.setVoucherAmount(cursor.isNull(offset + 2) ? null : cursor.getDouble(offset + 2));
         entity.setVoucherGeneratedTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setIsApplied(cursor.isNull(offset + 4) ? null : cursor.getShort(offset + 4) != 0);
-        entity.setAppliedTime(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setAppliedOutletID(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
-        entity.setAppliedOutletName(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setAppliedCompanyID(cursor.isNull(offset + 8) ? null : cursor.getLong(offset + 8));
-        entity.setAppliedCompanyName(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setAppliedUserID(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
-        entity.setAppliedUserName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setAppliedBillCode(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setCustomerID(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
+        entity.setIsCustomerApplied(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setAppliedTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setAppliedOutletID(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
+        entity.setAppliedOutletName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setAppliedCompanyID(cursor.isNull(offset + 9) ? null : cursor.getLong(offset + 9));
+        entity.setAppliedCompanyName(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setAppliedUserID(cursor.isNull(offset + 11) ? null : cursor.getLong(offset + 11));
+        entity.setAppliedUserName(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setAppliedBillCode(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setCustomerID(cursor.isNull(offset + 14) ? null : cursor.getLong(offset + 14));
      }
     
     /** @inheritdoc */

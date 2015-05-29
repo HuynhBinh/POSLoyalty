@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.em.posloyalty.R;
 import com.em.posloyalty.consts.APIConst;
 import com.em.posloyalty.consts.StaticFunc;
+import com.em.posloyalty.daocontrol.GreedDaoController;
 import com.em.posloyalty.service.APIService;
 import com.google.zxing.BarcodeFormat;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -29,6 +30,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.List;
 
+import greendao.Customer;
 import greendao.Voucher;
 
 /**
@@ -103,7 +105,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
             @Override
             public void onClick(View view)
             {
-                if (!voucher.getIsApplied())
+                if (!voucher.getIsCustomerApplied())
                 {
                     showConfirmDialog(context, voucher, position);
                 }
@@ -149,7 +151,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
             });
             //.displayImage(loadURL, holder.barcodeImageView, options);
 
-            if (voucher.getIsApplied())
+            if (voucher.getIsCustomerApplied())
             {
 
                 holder.usedImageView.setImageResource(R.drawable.used);
@@ -157,7 +159,8 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
 
                 holder.barcodeImageView.setAlpha(0.4f);
                 //holder.subWholeView.setAlpha(0.7f);
-            } else
+            }
+            else
             {
 
                 holder.usedImageView.setVisibility(View.GONE);
@@ -165,7 +168,8 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
 
                 //holder.subWholeView.setAlpha(1.0f);
             }
-        } else
+        }
+        else
         {
             Bitmap bitmap = null;
 
@@ -179,7 +183,8 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
 
                 //StaticFunc.saveBitmapToSDCard(barcodeData, bitmap);
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
 
             }
@@ -192,13 +197,14 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
 
             }
 
-            if (voucher.getIsApplied())
+            if (voucher.getIsCustomerApplied())
             {
                 holder.usedImageView.setImageResource(R.drawable.used);
                 holder.usedImageView.setVisibility(View.VISIBLE);
                 holder.barcodeImageView.setAlpha(0.4f);
                 //holder.subWholeView.setAlpha(0.7f);
-            } else
+            }
+            else
             {
 
 
@@ -287,8 +293,12 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
             public void onClick(View view)
             {
 
+
+                Customer customer = GreedDaoController.getCustomerByID(context, 1);
+
                 Intent intent = new Intent(APIConst.ACTION_APPLY_VOUCHER, null, context, APIService.class);
-                intent.putExtra(APIConst.EXTRA_VC_ID, voucher.getId().toString());
+                intent.putExtra(APIConst.EXTRA_VC_CODE, voucher.getVoucherCode());
+                intent.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
                 context.startService(intent);
 
 

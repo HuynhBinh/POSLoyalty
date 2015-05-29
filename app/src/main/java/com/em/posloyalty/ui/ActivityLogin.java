@@ -36,6 +36,8 @@ public class ActivityLogin extends Activity
         @Override
         public void onReceive(Context context, Intent intent)
         {
+
+
             if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOGIN))
             {
                 String result = intent.getStringExtra(APIConst.EXTRA_RESULT);
@@ -49,12 +51,19 @@ public class ActivityLogin extends Activity
                     intent2.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
                     startService(intent2);
 
+
+                    //load active voucher update
+                    Intent intent3 = new Intent(APIConst.ACTION_LOAD_USED_VOUCHER, null, ActivityLogin.this, APIService.class);
+                    intent3.putExtra(APIConst.EXTRA_CUSTOMER_ID, customer.getCustomerID());
+                    startService(intent3);
+
                     // start main activity
                     Intent intent1 = new Intent(ActivityLogin.this, ActivityMain.class);
                     startActivity(intent1);
                     finish();
 
-                } else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
+                }
+                else if (result.equalsIgnoreCase(APIConst.RESULT_NO_INTERNET))
                 {
 
                     Customer customer = GreedDaoController.getCustomerByID(ActivityLogin.this, 1);
@@ -63,7 +72,8 @@ public class ActivityLogin extends Activity
                         Intent intent1 = new Intent(ActivityLogin.this, ActivityMain.class);
                         startActivity(intent1);
                         finish();
-                    } else
+                    }
+                    else
                     {
 
                         layoutFlash.setVisibility(View.GONE);
@@ -73,7 +83,8 @@ public class ActivityLogin extends Activity
                         btnLogin.setEnabled(true);
                         SimpleToast.error(ActivityLogin.this, "Please check internet connection!");
                     }
-                } else
+                }
+                else
                 {
 
                     layoutFlash.setVisibility(View.GONE);
@@ -83,7 +94,8 @@ public class ActivityLogin extends Activity
                     btnLogin.setEnabled(true);
                     SimpleToast.error(ActivityLogin.this, "Incorrect username, password!");
                 }
-            } else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER))
+            }
+            else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER))
             {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable()
@@ -97,6 +109,21 @@ public class ActivityLogin extends Activity
                 }, Consts.LEAST_REFRESH_TIME);
 
             }
+            else if (intent.getAction().equalsIgnoreCase(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER))
+            {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        Log.e("GO", "Go here");
+                        APIConst.isLoadingUsedVoucher = false;
+                    }
+                }, Consts.LEAST_REFRESH_TIME);
+
+            }
+
         }
     };
 
@@ -129,7 +156,8 @@ public class ActivityLogin extends Activity
             layoutFlash.setVisibility(View.VISIBLE);
             layoutLogin.setVisibility(View.GONE);
             login();
-        } else
+        }
+        else
         {
             layoutFlash.setVisibility(View.GONE);
             layoutLogin.setVisibility(View.VISIBLE);
@@ -190,6 +218,7 @@ public class ActivityLogin extends Activity
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(APIConst.RECEIVER_FINISH_LOGIN);
             intentFilter.addAction(APIConst.RECEIVER_FINISH_LOAD_ACTIVE_VOUCHER);
+            intentFilter.addAction(APIConst.RECEIVER_FINISH_LOAD_USED_VOUCHER);
             registerReceiver(activityReceiver, intentFilter);
         }
     }

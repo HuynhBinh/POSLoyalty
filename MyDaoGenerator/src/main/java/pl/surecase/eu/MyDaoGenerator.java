@@ -38,6 +38,9 @@ public class MyDaoGenerator
         voucher.addDoubleProperty("voucherAmount");
         voucher.addStringProperty("voucherGeneratedTime");
         voucher.addBooleanProperty("isApplied");
+        voucher.addBooleanProperty("isCustomerApplied");
+
+
         voucher.addStringProperty("appliedTime");
 
         voucher.addLongProperty("appliedOutletID");

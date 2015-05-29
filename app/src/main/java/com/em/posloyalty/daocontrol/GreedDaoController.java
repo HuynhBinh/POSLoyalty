@@ -44,12 +44,12 @@ public class GreedDaoController
 
     public static List<Voucher> loadActiveVouchers(Context context)
     {
-        return getVoucherDAO(context).queryRaw("WHERE IS_APPLIED = ? ORDER BY _id DESC", "0");
+        return getVoucherDAO(context).queryRaw("WHERE IS_CUSTOMER_APPLIED = ? ORDER BY _id DESC", "0");
     }
 
     public static List<Voucher> loadUsedVouchers(Context context)
     {
-        return getVoucherDAO(context).queryRaw("WHERE IS_APPLIED = ? ORDER BY APPLIED_TIME DESC", "1");
+        return getVoucherDAO(context).queryRaw("WHERE IS_CUSTOMER_APPLIED = ? ORDER BY APPLIED_TIME DESC", "1");
     }
 
 

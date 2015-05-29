@@ -11,6 +11,7 @@ public class Voucher {
     private Double voucherAmount;
     private String voucherGeneratedTime;
     private Boolean isApplied;
+    private Boolean isCustomerApplied;
     private String appliedTime;
     private Long appliedOutletID;
     private String appliedOutletName;
@@ -28,12 +29,13 @@ public class Voucher {
         this.id = id;
     }
 
-    public Voucher(Long id, String voucherCode, Double voucherAmount, String voucherGeneratedTime, Boolean isApplied, String appliedTime, Long appliedOutletID, String appliedOutletName, Long appliedCompanyID, String appliedCompanyName, Long appliedUserID, String appliedUserName, String appliedBillCode, Long customerID) {
+    public Voucher(Long id, String voucherCode, Double voucherAmount, String voucherGeneratedTime, Boolean isApplied, Boolean isCustomerApplied, String appliedTime, Long appliedOutletID, String appliedOutletName, Long appliedCompanyID, String appliedCompanyName, Long appliedUserID, String appliedUserName, String appliedBillCode, Long customerID) {
         this.id = id;
         this.voucherCode = voucherCode;
         this.voucherAmount = voucherAmount;
         this.voucherGeneratedTime = voucherGeneratedTime;
         this.isApplied = isApplied;
+        this.isCustomerApplied = isCustomerApplied;
         this.appliedTime = appliedTime;
         this.appliedOutletID = appliedOutletID;
         this.appliedOutletName = appliedOutletName;
@@ -83,6 +85,14 @@ public class Voucher {
 
     public void setIsApplied(Boolean isApplied) {
         this.isApplied = isApplied;
+    }
+
+    public Boolean getIsCustomerApplied() {
+        return isCustomerApplied;
+    }
+
+    public void setIsCustomerApplied(Boolean isCustomerApplied) {
+        this.isCustomerApplied = isCustomerApplied;
     }
 
     public String getAppliedTime() {

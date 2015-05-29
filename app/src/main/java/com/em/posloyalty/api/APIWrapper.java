@@ -19,6 +19,46 @@ import greendao.Voucher;
  */
 public class APIWrapper
 {
+
+    public static boolean applyVoucher(Context context, String customerID, String voucherCode)
+    {
+        boolean isSuccess = false;
+        API api = new API();
+        String result = api.applyVoucher(customerID, voucherCode);
+        JSONObject jsonResponse;
+
+        try
+        {
+            jsonResponse = new JSONObject(result);
+
+            JSONObject root = jsonResponse.getJSONObject("root");
+
+            String statusFromServer = root.optString("status");
+
+            if (statusFromServer.equalsIgnoreCase("success"))
+            {
+
+                Voucher voucher = GreedDaoController.getVoucherByVoucherCode(context, voucherCode);
+                voucher.setIsCustomerApplied(true);
+                GreedDaoController.updateVoucher(context, voucher);
+
+                isSuccess = true;
+            }
+            else
+            {
+                isSuccess = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            isSuccess = false;
+        }
+
+        return isSuccess;
+
+    }
+
+
     public static boolean login(Context context, String username, String pass)
     {
         boolean isLoginSuccess = false;
@@ -77,18 +117,21 @@ public class APIWrapper
                 {
                     customer.setId(customers.get(0).getId());
                     GreedDaoController.updateCustomer(context, customer);
-                } else
+                }
+                else
                 {
                     GreedDaoController.insertCustomer(context, customer);
                 }
 
 
                 isLoginSuccess = true;
-            } else
+            }
+            else
             {
                 isLoginSuccess = false;
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             isLoginSuccess = false;
         }
@@ -122,12 +165,18 @@ public class APIWrapper
                 String voucherCode = data.optString("voucher_code");
                 String voucherAmount = data.optString("voucher_value");
                 String createdAt = data.optString("created_at");
+                Double remainPoint = data.optDouble("rest_points");
+
+                Customer customer = GreedDaoController.getCustomerByID(context, 1);
+                customer.setCustomerPoint(remainPoint);
+                GreedDaoController.updateCustomer(context, customer);
 
 
                 Voucher voucher = new Voucher();
                 voucher.setVoucherCode(voucherCode);
                 voucher.setVoucherGeneratedTime(createdAt);
                 voucher.setIsApplied(false);
+                voucher.setIsCustomerApplied(false);
 
                 if (!voucherAmount.isEmpty())
                 {
@@ -139,11 +188,13 @@ public class APIWrapper
 
 
                 isSuccess = true;
-            } else
+            }
+            else
             {
                 isSuccess = false;
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             isSuccess = false;
         }
@@ -152,13 +203,13 @@ public class APIWrapper
 
     }
 
-    public static boolean getAllVouchers(Context context, String customerID)
+    public static boolean getAllVouchers(Context context, String customerID, boolean isCustomerApplied1)
     {
         Log.e("API", "getAllVouchers");
 
         boolean isSuccess = false;
         API api = new API();
-        String result = api.getAllVouchers(customerID);
+        String result = api.getAllVouchers(customerID, isCustomerApplied1);
         JSONObject jsonResponse;
 
         try
@@ -182,13 +233,17 @@ public class APIWrapper
                     String voucherCode = jsonObject.optString("voucher_code");
                     String voucherAmount = jsonObject.optString("voucher_value");
                     String createdAt = jsonObject.optString("created_at");
-                    boolean isUsed = jsonObject.optBoolean("is_used");
+                    int isUsed = jsonObject.optInt("is_used");
+                    int isCustomerApplied = jsonObject.optInt("is_customer_applied");
 
 
                     Voucher voucher = new Voucher();
                     voucher.setVoucherCode(voucherCode);
                     voucher.setVoucherGeneratedTime(createdAt);
-                    voucher.setIsApplied(isUsed);
+                    boolean bIsUsed = (isUsed != 0);
+                    voucher.setIsApplied(bIsUsed);
+                    boolean bIsCustomerApplied = (isCustomerApplied != 0);
+                    voucher.setIsCustomerApplied(bIsCustomerApplied);
 
                     if (!voucherAmount.isEmpty())
                     {
@@ -201,7 +256,8 @@ public class APIWrapper
                         Voucher inDBVoucher = GreedDaoController.getVoucherByVoucherCode(context, voucherCode);
                         voucher.setId(inDBVoucher.getId());
                         GreedDaoController.updateVoucher(context, voucher);
-                    } catch (DaoException dex)
+                    }
+                    catch (DaoException dex)
                     {
                         GreedDaoController.insertVoucher(context, voucher);
                     }
@@ -210,11 +266,13 @@ public class APIWrapper
                 }
 
                 isSuccess = true;
-            } else
+            }
+            else
             {
                 isSuccess = false;
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             isSuccess = false;
         }
@@ -227,7 +285,7 @@ public class APIWrapper
     {
         boolean isSuccess = false;
         API api = new API();
-        String result = api.getAllCard(userid, 0);
+        String result = "";//api.getAllCard(userid, 0);
         JSONObject jsonResponse;
 
         try
@@ -259,11 +317,13 @@ public class APIWrapper
 
 
                 isSuccess = true;
-            } else
+            }
+            else
             {
                 isSuccess = false;
             }
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             isSuccess = false;
         }
