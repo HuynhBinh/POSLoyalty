@@ -20,7 +20,7 @@ import java.util.List;
 public class API
 {
 
-    public static final String API_BASE_LINK = "http://dev.cloudshop.sg/api/1.1/";
+    public static final String API_BASE_LINK = "http://cloudshop.sg/api/1.2/";; //"http://dev.cloudshop.sg/api/1.1/";
 
     private HttpClient client = new DefaultHttpClient();
     private HttpPost post = new HttpPost("http://dev.cloudshop.sg");

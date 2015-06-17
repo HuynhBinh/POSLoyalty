@@ -36,6 +36,7 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
         public final static Property VoucherMax = new Property(10, Double.class, "voucherMax", false, "VOUCHER_MAX");
         public final static Property IsFixedAmount = new Property(11, Boolean.class, "isFixedAmount", false, "IS_FIXED_AMOUNT");
         public final static Property FixedAmount = new Property(12, Double.class, "fixedAmount", false, "FIXED_AMOUNT");
+        public final static Property CustomerPassword = new Property(13, String.class, "customerPassword", false, "CUSTOMER_PASSWORD");
     };
 
     private DaoSession daoSession;
@@ -66,7 +67,8 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
                 "'VOUCHER_MIN' REAL," + // 9: voucherMin
                 "'VOUCHER_MAX' REAL," + // 10: voucherMax
                 "'IS_FIXED_AMOUNT' INTEGER," + // 11: isFixedAmount
-                "'FIXED_AMOUNT' REAL);"); // 12: fixedAmount
+                "'FIXED_AMOUNT' REAL," + // 12: fixedAmount
+                "'CUSTOMER_PASSWORD' TEXT);"); // 13: customerPassword
     }
 
     /** Drops the underlying database table. */
@@ -144,6 +146,11 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
         if (fixedAmount != null) {
             stmt.bindDouble(13, fixedAmount);
         }
+ 
+        String customerPassword = entity.getCustomerPassword();
+        if (customerPassword != null) {
+            stmt.bindString(14, customerPassword);
+        }
     }
 
     @Override
@@ -174,7 +181,8 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
             cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9), // voucherMin
             cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10), // voucherMax
             cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0, // isFixedAmount
-            cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12) // fixedAmount
+            cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12), // fixedAmount
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // customerPassword
         );
         return entity;
     }
@@ -195,6 +203,7 @@ public class CustomerDao extends AbstractDao<Customer, Long> {
         entity.setVoucherMax(cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10));
         entity.setIsFixedAmount(cursor.isNull(offset + 11) ? null : cursor.getShort(offset + 11) != 0);
         entity.setFixedAmount(cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12));
+        entity.setCustomerPassword(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     
     /** @inheritdoc */

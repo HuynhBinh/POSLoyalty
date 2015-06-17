@@ -45,6 +45,8 @@ public class ActivityLogin extends Activity
                 {
                     // pre-load the data of voucher so that user can immidiately see the vouchers after login, no need to wait
                     Customer customer = GreedDaoController.getCustomerByID(ActivityLogin.this, 1);
+                    customer.setCustomerPassword(edtPassword.getText().toString().trim());
+                    GreedDaoController.updateCustomer(ActivityLogin.this, customer);
 
                     //load active voucher update
                     Intent intent2 = new Intent(APIConst.ACTION_LOAD_ACTIVE_VOUCHER, null, ActivityLogin.this, APIService.class);
@@ -201,8 +203,21 @@ public class ActivityLogin extends Activity
 
     public void login()
     {
+
+        Customer customer = GreedDaoController.getCustomerByID(ActivityLogin.this, 1);
+
+
         String customerCode = edtUsername.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
+
+        if (customer != null)
+        {
+
+            customerCode = customer.getCustomerCode();//edtUsername.getText().toString().trim();
+            password = customer.getCustomerPassword();//edtPassword.getText().toString().trim();
+
+        }
+
 
         Intent intent = new Intent(APIConst.ACTION_LOGIN, null, ActivityLogin.this, APIService.class);
         intent.putExtra(APIConst.EXTRA_USERNAME, customerCode);

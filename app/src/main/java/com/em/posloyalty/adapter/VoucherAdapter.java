@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
@@ -258,10 +259,11 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
     }
 
 
+    Bitmap bitmap;
     private void showConfirmDialog(final Context context, final Voucher voucher, final int position)
     {
         final Dialog dialog = new Dialog(context);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(true);
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);//.setTitle("Apply Voucher");
         dialog.setContentView(R.layout.popup_confirm_voucher);
@@ -272,6 +274,26 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
         TextView txtTittle = (TextView) dialog.findViewById(R.id.txtTittle);
         TextView txtContent = (TextView) dialog.findViewById(R.id.txtContent);
         TextView txtAmount = (TextView) dialog.findViewById(R.id.txtAmount);
+        ImageView imgViewBigBarcode = (ImageView)dialog.findViewById(R.id.imageBarcodeBig);
+
+
+
+        {
+            // load big barcode image for easy scan
+            try
+            {
+                bitmap = StaticFunc.generateBarcodeBitmap(voucher.getVoucherCode(), BarcodeFormat.CODE_128, screenWidth, (screenWidth - (screenWidth/3)) );
+                if(bitmap != null)
+                {
+                    imgViewBigBarcode.setImageBitmap(bitmap);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
 
 
         txtContent.setText(voucher.getVoucherCode());
@@ -284,6 +306,8 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
             public void onClick(View view)
             {
                 dialog.dismiss();
+                bitmap.recycle();
+
             }
         });
 
@@ -303,6 +327,7 @@ public class VoucherAdapter extends RecyclerView.Adapter<VoucherAdapter.ViewHold
 
 
                 dialog.dismiss();
+                bitmap.recycle();
             }
         });
 

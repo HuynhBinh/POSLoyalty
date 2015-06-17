@@ -108,13 +108,13 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_edt"
                         android:gravity="center_vertical"
-                        android:hint="Email"
+                        android:hint="Customer code"
                         android:imeOptions="actionNext"
                         android:paddingLeft="@dimen/dm_65dp"
                         android:paddingRight="@dimen/dm_10dp"
                         android:singleLine="true"
                         android:textColor="#000000"
-                        android:text="BINH-1ICT"
+                        android:text="Binh-5555"
                         android:textColorHint="#676b7d">
 
 
@@ -159,8 +159,8 @@
                         android:paddingLeft="@dimen/dm_65dp"
                         android:paddingRight="@dimen/dm_10dp"
                         android:singleLine="true"
+                        android:text="7RLUqS"
                         android:textColor="#ffffff"
-                        android:text="tKcBlG"
                         android:textColorHint="#676b7d"/>
 
                     <ImageView

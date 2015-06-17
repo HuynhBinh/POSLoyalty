@@ -29,6 +29,7 @@ public class MyDaoGenerator
         customer.addDoubleProperty("voucherMax");
         customer.addBooleanProperty("isFixedAmount");
         customer.addDoubleProperty("fixedAmount");
+        customer.addStringProperty("customerPassword");
 
 
         Entity voucher = schema.addEntity("Voucher");

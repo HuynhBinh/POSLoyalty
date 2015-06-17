@@ -23,6 +23,7 @@ public class Customer {
     private Double voucherMax;
     private Boolean isFixedAmount;
     private Double fixedAmount;
+    private String customerPassword;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -39,7 +40,7 @@ public class Customer {
         this.id = id;
     }
 
-    public Customer(Long id, String customerName, String customerEmail, String customerPhone, Double customerPoint, String customerGroup, String customerCode, String customerID, String company, Double voucherMin, Double voucherMax, Boolean isFixedAmount, Double fixedAmount) {
+    public Customer(Long id, String customerName, String customerEmail, String customerPhone, Double customerPoint, String customerGroup, String customerCode, String customerID, String company, Double voucherMin, Double voucherMax, Boolean isFixedAmount, Double fixedAmount, String customerPassword) {
         this.id = id;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
@@ -53,6 +54,7 @@ public class Customer {
         this.voucherMax = voucherMax;
         this.isFixedAmount = isFixedAmount;
         this.fixedAmount = fixedAmount;
+        this.customerPassword = customerPassword;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -163,6 +165,14 @@ public class Customer {
 
     public void setFixedAmount(Double fixedAmount) {
         this.fixedAmount = fixedAmount;
+    }
+
+    public String getCustomerPassword() {
+        return customerPassword;
+    }
+
+    public void setCustomerPassword(String customerPassword) {
+        this.customerPassword = customerPassword;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
